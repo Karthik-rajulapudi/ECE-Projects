@@ -1,0 +1,36 @@
+%Matlab code for designing square law modulator
+
+clc;
+clear all;
+close all;
+t = 0:0.0001:2;
+fs = 10000;
+Am = 0.25;
+fm = 10;
+Ac = 1;
+fc = 100;
+mt = Am.*cos(2*pi*fm*t);
+ct = Ac.*sin(2*pi*fc*t);
+v1t = mt + ct;
+v2t = v1t + v1t.*v1t;
+order    = 3;
+fcutlow  = fc-fm;
+fcuthigh = fc+fm;
+[b,a]    = butter(order,[fcutlow,fcuthigh]/(fs/2), 'bandpass');
+st       = filter(b,a,v2t);
+figure;
+subplot(3,1,1);
+plot(t,mt);
+title('Message Signal');
+xlabel('Time');
+ylabel('Amplitude');
+subplot(3,1,2);
+plot(t,ct);
+title('Carrier Signal');
+xlabel('Time');
+ylabel('Amplitude');
+subplot(3,1,3);
+plot(t,st);
+title('Modulated Signal');
+xlabel('Time');
+ylabel('Amplitude');
